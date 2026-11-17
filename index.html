@@ -330,17 +330,17 @@ function sampS(){if(M.f!='Test')return 0;let d=dd(),w=cl(Math.max(0,-d)/16,0,1.5
  return u<.02+.05*w?40+R()*60:u<.17+.06*w?180+R()*20:u<.2+.06*w?300+R()*R()*215:243+ctr+(R()-R())*50}
 const mS=c=>{if(M.f!='Test')return 1;let q=c.r/Math.max(1,c.S);return q<.6?1.08:q<1?1.02:.94};
 function newInn(){let side=bm()?M.me:M.op;M.I[M.inn]={k:kf(),S:sampS(),r:0,w:0,b:0,s:0,ns:1,next:2,bw:{},lastB:null,lastWicketBall:-99,quickWickets:0,fieldBoost:0,momentum:0,partnership:0,closed:false,dec:false,shots:[],bt:side.map(p=>({p,r:0,b:0,out:0}))};M.log.push(`— Innings ${M.inn+1}: ${bc(M.inn)} batting —`)}
-function ball(c,bl,fd,mt){let s=c.bt[c.s],bo=c.bw[bl.n]||(c.bw[bl.n]={o:0,r:0,w:0,b:0}),X=M.F,fc=bm()?0:G.u.f,d=bl.r[M.f][1]*Math.max(.8,1-.012*bo.o)+(bm()?0:fanMod())-s.p.r[M.f][0]-(bm()?fanMod():0);s.b++;c.b++;bo.b=(bo.b||0)+1;bo.o=Math.floor(bo.b/6);
- let hidden=(c.momentum?1.035:1)+(c.fieldBoost?0.045:0),pitch=M.pitch||{bias:0,type:'balanced'},pitchW=pitchWicketMod();let pw=cl(X.pw*(1+d*.028)*(mt==2?1.5:mt==0?.75:1)*(fd==2?1.15:fd==0?.9:1)*(1+.03*fc)*c.k*mS(c)*hidden*pitchW*(1+pitch.bias)*(bl.t=='S'&&M.f=='Test'?1+.04*M.inn:1),.005,.15);
+function ball(c,bl,fd,mt){let s=c.bt[c.s],bo=c.bw[bl.n]||(c.bw[bl.n]={o:0,r:0,w:0,b:0}),X=M.F,bs=bl.r[M.f][1],bq=bs-((c.bp&&c.bp.avg!=null)?c.bp.avg:84),fc=bm()?0:G.u.f,d=bs*Math.max(.8,1-.012*bo.o)+(bm()?0:fanMod())-s.p.r[M.f][0]-(bm()?fanMod():0);s.b++;c.b++;bo.b=(bo.b||0)+1;bo.o=Math.floor(bo.b/6);
+ let hidden=(c.momentum?1.035:1)+(c.fieldBoost?0.045:0),pitch=M.pitch||{bias:0,type:'balanced'},pitchW=pitchWicketMod();let pw=cl(X.pw*(1+d*.028)*(1+bq*.0045)*(mt==2?1.5:mt==0?.75:1)*(fd==2?1.15:fd==0?.9:1)*(1+.03*fc)*c.k*mS(c)*hidden*pitchW*(1+pitch.bias)*(bl.t=='S'&&M.f=='Test'?1+.04*M.inn:1),.005,.15);
  if(R()<pw){s.out=1;c.partnership=0;if(c.b-c.lastWicketBall<=12){c.quickWickets=(c.quickWickets||0)+1;if(c.quickWickets>=2)c.fieldBoost=12}else c.quickWickets=1;c.lastWicketBall=c.b;let fs=bm()?M.op:M.me,wk=bm()?(fs.find(z=>z.t=='W')||fs[0]).n:wkN(M.f),r=R(),bnm=s.p.n,tail=['F','S'].includes(s.p.t),late=c.b>(M.F.lim?M.F.lim*6*.78:300),head=/^T Head$/.test(bnm),marsh=/^M Marsh$/.test(bnm),runoutChance=tail&&late?.075:late?.06:.045;
  if(r<runoutChance){let fld=fs.filter(z=>z.n!=wk),fier=fld[~~(R()*Math.max(1,fld.length))]||{n:wk};s.how='run out ('+fier.n+')';}
  else if(head&&r<runoutChance+.23){s.how='b '+bl.n+' (chopped on)';}
  else if(marsh&&r<runoutChance+.12){let fld=fs.filter(z=>z.n!=wk),fier=fld[~~(R()*Math.max(1,fld.length))]||{n:wk};s.how='c '+fier.n+' b '+bl.n+' (pull)';}
  else {let q=(r-runoutChance-(head?.23:0)-(marsh?.12:0))/Math.max(.01,1-runoutChance-(head?.23:0)-(marsh?.12:0));if(q<.62)s.how='c '+(R()<.25?wk:fs[~~(R()*fs.length)].n)+' b '+bl.n;else if(q<.83)s.how='b '+bl.n;else if(q<.95)s.how='lbw b '+bl.n;else s.how='st '+wk+' b '+bl.n;}
  if(s.how.startsWith('st ')||s.how.startsWith('c '+wk+' b')){c.keep=c.keep||{};c.keep[wk]=c.keep[wk]||{c:0,s:0};if(s.how.startsWith('st '))c.keep[wk].s++;else c.keep[wk].c++;}if(!s.how.startsWith('b ')){c.shots=c.shots||[];let wa=R()*Math.PI*2,wr=28+R()*48;c.shots.push({batter:s.p.n,r:'W',shot:s.how,x:150+Math.cos(wa)*wr,y:150+Math.sin(wa)*wr});}if(!s.how.startsWith('run out'))bo.w++;c.w++;if(c.w<10){if(bm()){c.pendingWicket=true;c.pendingBatter=true;c.pendingStriker=c.s}else c.s=c.next++;}return 'W'}
- let batAdv=cl((s.p.r[M.f][0]-bl.r[M.f][1]),-35,35),dotBase=cl(X.dot+(mt==0?.1:mt==2?-.12:0)+(fd==0?.03:fd==2?-.02:0)+d*.002+.01*fc-batAdv*.0055,.18,.94);
+ let batAdv=cl((s.p.r[M.f][0]-bl.r[M.f][1]),-35,35),dotBase=cl(X.dot+(mt==0?.1:mt==2?-.12:0)+(fd==0?.03:fd==2?-.02:0)+d*.002+bq*.008+.01*fc-batAdv*.0055,.18,.94);
  let dot=cl(dotBase*pitchBatMod(),.25,.92),r=0;
- if(R()>dot){let a=mt==2?.06:0,pbm=pitchBatMod(),w=X.w.map((v,i)=>{let q=v;if(i==3)q+=a;if(i==4)q+=a/2;if(i==3||i==4)q*=pbm;if(i==0)q*=cl(1+batAdv*.012,.55,1.5);if(i==1)q*=cl(1+batAdv*.008,.6,1.4);if(i==2)q*=cl(1+batAdv*.004,.7,1.3);if(i>=3)q*=cl(1-batAdv*.009,.6,1.6);return q}),x=R()*w.reduce((p,q)=>p+q,0),i=0;while(x>w[i]){x-=w[i];i++}r=[1,2,3,4,6][i]}
+ if(R()>dot){let a=mt==2?.06:0,pbm=pitchBatMod(),w=X.w.map((v,i)=>{let q=v;if(i==3)q+=a;if(i==4)q+=a/2;if(i==3||i==4)q*=pbm;if(i==0)q*=cl(1+batAdv*.012,.55,1.5);if(i==1)q*=cl(1+batAdv*.008,.6,1.4);if(i==2)q*=cl(1+batAdv*.004,.7,1.3);if(i>=3)q*=cl(1-batAdv*.009,.6,1.6)*cl(1-bq*.006,.7,1.35);return q}),x=R()*w.reduce((p,q)=>p+q,0),i=0;while(x>w[i]){x-=w[i];i++}r=[1,2,3,4,6][i]}
  s.r+=r;c.r+=r;bo.r+=r;c.partnership=(c.partnership||0)+r;s.six=(s.six||0)+(r==6);s.four=(s.four||0)+(r==4);c.shots=c.shots||[];let bn=s.p.n,profile={name:'balanced shot',ang:[-170,-145,-120,-95,-70,-45,-20,5,30,55,80,105,130,155]};let ang=profile.ang[~~(R()*profile.ang.length)]+(R()-.5)*18;if(M.f==='Test'&&r==='W'&&!s.how?.startsWith('b ')){ang=(R()<.5?-1:1)*(145+R()*30);}let rad=r==4||r==6?132:r==0?8+R()*24:r==1?18+Math.pow(R(),2.8)*108:r==2?34+Math.pow(R(),1.8)*82:r==3?48+Math.pow(R(),1.5)*68:58+Math.pow(R(),1.4)*60,ar=ang*Math.PI/180;c.shots.push({batter:bn,r,shot:profile.name,x:150+Math.cos(ar)*rad,y:150+Math.sin(ar)*rad});if(c.partnership>=100)c.momentum=1;if(c.fieldBoost>0)c.fieldBoost--;if(r%2)[c.s,c.ns]=[c.ns,c.s];return r?''+r:'·'}
 function over(bl,fd,mt,limit=6){let c=M.I[M.inn],o=[],L=M.F.lim,used=0;
  for(let i=0;i<limit;i++){o.push(ball(c,bl,fd,mt));used++;if(c.w>=10||won(c))break;if(c.pendingWicket&&!simNextBatter(c))break}
@@ -376,7 +376,21 @@ function finish(r){M.closed=true;M.res=r;let o=T[M.o].n,f=M.f,fx=G.fx[G.fi],L=T[
  G.news.unshift(story(G.me,hd+(M.sot?' in a super over':''),`${fs}. ${f} match report from ${fx.ev}. ${M.ser}${M.pom?` Player of the match: ${M.pom.n}.`:''}`,'ESPNcricinfo',r=='W'?'win':r=='L'?'loss':'gen'));
  if(!fx.ko&&!fx.lg&&fx.g==fx.n){let nm=fx.ev.replace(/ \d{4}-\d{2}$/,''),tr=Object.values(TR).concat(Object.values(TRo)).includes(nm),m=sr.m,q=sr.o,h2=m>q?(tr?`${L} win ${nm} ${m}-${q}`:r=='L'?`${L} lose to ${o} but win the series ${m}-${q}`:`${L} win the ${f} series ${m}-${q}`):q>m?(tr?`${L} lose ${nm} ${q}-${m}`:r=='W'?`${L} win the match but lose the series ${q}-${m}`:`${L} lose the ${f} series ${q}-${m}`):`${L} and ${o} draw the series ${m}-${q}`;G.news.unshift(story(m>q?G.me:M.o,h2,`The ${nm} concluded against ${o}.${M.pos?` ${M.pos.n} was named player of the series.`:''}`,'ESPNcricinfo',m>q?(tr?'tw':'sw'):q>m?(tr?'tl':'sl'):'gen'))}
  objUpd(r,fx);fill();fill();G.nw=0}
-const aiB=(side,c)=>{side=Array.isArray(side)?side:[];let o=p=>c.bw[p.n]?c.bw[p.n].o:0,a=side.filter(p=>p&&p.r&&p.r[M.f]&&p.r[M.f][1]>45&&o(p)<M.F.mx).map(p=>({p,v:p.r[M.f][1]*(1-.012*o(p))-(p.n==c.lastB?100:0)+R()*6})).sort((x,y)=>y.v-x.v);return a[0]?a[0].p:side.slice().sort((x,y)=>o(x)-o(y))[0]};
+function bowlPlan(c){if(c.bp)return c.bp;let f=M.f,L=M.F.lim,mx=M.F.mx,bs=(bc(M.inn)==G.me?M.op:M.me),rk=(Array.isArray(bs)?bs:[]).filter(p=>p&&p.r&&p.r[f]).sort((a,b)=>b.r[f][1]-a.r[f][1]),q,tot,left;
+ if(!L)q=rk.slice(0,6).map(()=>1e9);
+ else if(L==20)q=rk.length>5&&R()<.35?[4,4,4,4,2,2]:[4,4,4,4,4];
+ else if(L==50){let t=R();q=t<.25?[10,10,10,10,7,3]:t<.5?[10,10,10,8,6,6]:[10,10,10,10,5,5]}
+ else{q=Array(Math.max(1,Math.min(rk.length,Math.ceil(L/mx)))).fill(0);left=L;while(left>0&&q.some(v=>v<mx)){for(let k=0;k<q.length&&left>0;k++)if(q[k]<mx){q[k]++;left--}}}
+ tot=q.reduce((s,v)=>s+v,0);q=q.slice(0,Math.max(1,rk.length));left=tot-q.reduce((s,v)=>s+v,0);
+ for(let i=0;i<q.length&&left>0;i++){let add=Math.min(mx-q[i],left);q[i]+=add;left-=add}
+ let rem={},att=rk.slice(0,q.length);att.forEach((p,i)=>rem[p.n]=(rem[p.n]||0)+q[i]);
+ return c.bp={left:rem,avg:att.reduce((s,p)=>s+p.r[f][1],0)/Math.max(1,att.length)}}
+const aiB=(side,c)=>{side=Array.isArray(side)?side:[];let f=M.f,left=bowlPlan(c).left,o=p=>c.bw[p.n]?c.bw[p.n].o:0,ok=p=>p&&p.r&&p.r[f],q=side.filter(p=>ok(p)&&left[p.n]>0&&p.n!=c.lastB);
+ if(!q.length)q=side.filter(p=>ok(p)&&left[p.n]>0);
+ if(!q.length)q=side.filter(p=>ok(p)&&o(p)<M.F.mx);
+ if(!q.length)q=side.filter(p=>ok(p));
+ if(!q.length)return side[0];
+ let v=p=>p.r[f][1]-(M.F.lim?0:o(p)*4.5)+(p.n==c.lastB?-100:0)+R()*8;q.sort((a,b)=>v(b)-v(a));if(left[q[0].n]>0)left[q[0].n]--;return q[0]};
 function aiM(c){let L=M.F.lim;if(M.f=='Test')return M.inn==3?((tgt()-c.r)/Math.max(1,450-M.overs)>3.4?2:c.w>=7?0:1):1;
  if(M.inn==li()){let q=(tgt()-c.r)/Math.max(1,L-c.b/6);return q>(L==20?9:5.8)?2:c.w>=7?0:1}return L==20?(c.w<6?2:1):(c.b>240?2:1)}
 function aiDec(c){if(M.f!='Test'||M.inn!=2||bm())return false;let l=M.I[0].r+c.r-M.I[1].r;return l>=330||(l>=250&&M.overs>300)}
